@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meagen — Digital Portfolio · SAP BTP &amp; AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0a0a0a;
+    --panel:#141414;
+    --paper:#ffffff;
+    --paper-2:#f0f0f0;
+    --gold:#d81e2c;
+    --gold-dim:#9c1420;
+    --teal:#d81e2c;
+    --teal-dim:#9c1420;
+    --line:#dcdcdc;
+    --line-dark:#333333;
+    --ok:#0a0a0a;
+    --warn:#d81e2c;
+    --font-display:'Space Grotesk',sans-serif;
+    --font-body:'IBM Plex Sans',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+    font-size:16px;
+  }
+  ::selection{background:var(--gold);color:var(--ink);}
+  a{color:inherit;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 32px;}
+  h1,h2,h3,h4{font-family:var(--font-display);margin:0;letter-spacing:-0.01em;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--teal-dim);
+    display:flex;align-items:center;gap:8px;
+    margin-bottom:14px;
+  }
+  .eyebrow .node{width:7px;height:7px;border-radius:50%;background:var(--gold);flex:none;}
+
+  /* ---------- NAV ---------- */
+  .topnav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(236,233,223,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .topnav .wrap{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;}
+  .brand{font-family:var(--font-mono);font-size:14px;font-weight:600;letter-spacing:.04em;}
+  .brand span{color:var(--gold-dim);}
+  .navlinks{display:flex;gap:26px;font-family:var(--font-mono);font-size:13px;}
+  .navlinks a{text-decoration:none;color:var(--ink);opacity:.7;transition:opacity .15s;}
+  .navlinks a:hover{opacity:1;}
+  @media(max-width:720px){.navlinks{display:none;}}
+
+  /* ---------- CONNECTOR THREAD (signature element) ---------- */
+  .thread{
+    position:relative;
+    padding-left:26px;
+    border-left:2px solid var(--line);
+    margin-left:6px;
+  }
+  .thread::before{
+    content:"";
+    position:absolute;left:-7px;top:0;
+    width:12px;height:12px;border-radius:50%;
+    background:var(--paper);border:2px solid var(--gold);
+  }
+  .section-divider{
+    display:flex;align-items:center;gap:12px;
+    margin:0 0 36px 0;
+  }
+  .section-divider .dot{width:10px;height:10px;border-radius:50%;background:var(--teal);flex:none;}
+  .section-divider .rule{height:1px;background:var(--line);flex:1;}
+  .section-tag{font-family:var(--font-mono);font-size:12px;color:var(--gold-dim);letter-spacing:.1em;}
+
+  section{padding:96px 0;}
+  section.dark{background:var(--ink);color:var(--paper);}
+  section.dark .section-divider .rule{background:var(--line-dark);}
+  section.dark .eyebrow{color:var(--gold);}
+
+  /* ---------- HERO ---------- */
+  .hero{padding-top:64px;padding-bottom:80px;}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;}}
+  .hero h1{font-size:48px;line-height:1.08;margin-bottom:18px;}
+  .hero h1 em{font-style:normal;color:var(--gold-dim);border-bottom:3px solid var(--gold);}
+  .hero p.lede{font-size:18px;max-width:46ch;color:#3a3a3a;margin-bottom:28px;}
+  .contact-row{display:flex;flex-wrap:wrap;gap:12px;}
+  .pill{
+    font-family:var(--font-mono);font-size:13px;
+    border:1px solid var(--ink);border-radius:999px;
+    padding:8px 16px;text-decoration:none;
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--paper);transition:.15s;
+  }
+  .pill:hover{background:var(--ink);color:var(--paper);}
+  .pill.placeholder{border-style:dashed;color:var(--warn);border-color:var(--warn);}
+
+  .avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .avatar{
+    width:220px;height:220px;border-radius:50%;
+    background:linear-gradient(150deg,var(--teal),var(--ink));
+    display:flex;align-items:center;justify-content:center;
+    border:4px solid var(--paper);outline:2px dashed var(--gold-dim);outline-offset:6px;
+    font-family:var(--font-display);color:var(--paper);font-size:15px;text-align:center;padding:20px;
+  }
+  .avatar-img{
+  width:220px;height:220px;border-radius:50%;
+  object-fit:cover;
+  border:4px solid var(--paper);outline:2px dashed var(--gold-dim);outline-offset:6px;
+  }
+  .avatar span{opacity:.85;font-family:var(--font-mono);font-size:12px;display:block;margin-top:8px;}
+
+  /* schematic diagram */
+  .schematic{margin-top:34px;}
+  .schematic svg{width:100%;height:auto;display:block;}
+
+  /* ---------- ROLE / COMPANY ---------- */
+  .kv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:8px;}
+  .kv{background:var(--paper);padding:22px 24px;}
+  .kv .k{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-dim);margin-bottom:8px;}
+  .kv .v{font-size:16px;font-weight:600;}
+  @media(max-width:720px){.kv-grid{grid-template-columns:1fr;}}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px;}
+  @media(max-width:780px){.two-col{grid-template-columns:1fr;}}
+  .card{border:1px solid var(--line);background:var(--paper);padding:28px;}
+  .card h3{font-size:20px;margin-bottom:12px;}
+  .card p{color:#3a3a3a;font-size:15px;}
+
+  /* ---------- EVIDENCE TABS ---------- */
+  .tabbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;}
+  .tabbtn{
+    font-family:var(--font-mono);font-size:13px;padding:10px 18px;
+    background:transparent;border:1px solid var(--line-dark);color:var(--paper);
+    cursor:pointer;opacity:.6;transition:.15s;
+  }
+  .tabbtn.active{opacity:1;background:var(--gold);color:#ffffff;border-color:var(--gold);font-weight:600;}
+  .tabpanel{display:none;}
+  .tabpanel.active{display:block;animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  .evidence-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:44px;}
+  @media(max-width:860px){.evidence-layout{grid-template-columns:1fr;}}
+  .evidence-layout h4{color:var(--gold);font-size:22px;margin-bottom:14px;}
+  .evidence-layout .role-tag{font-family:var(--font-mono);font-size:12px;color:var(--teal);opacity:.9;letter-spacing:.06em;margin-bottom:18px;display:block;}
+  .evidence-layout ul{padding-left:20px;margin:16px 0;color:#c9c9c9;}
+  .evidence-layout li{margin-bottom:8px;}
+  .evidence-layout p{color:#c9c9c9;}
+
+  .codeblock{
+    background:#0a0a0a;border:1px solid var(--line-dark);
+    font-family:var(--font-mono);font-size:12.5px;color:#e6e6e6;
+    padding:20px;overflow-x:auto;line-height:1.7;
+  }
+  .codeblock .cm{color:#8a8a8a;}
+  .codeblock .kw{color:#ff4d56;}
+  .codeblock .fn{color:#ffffff;font-weight:600;}
+  .codeblock .str{color:#a8a8a8;}
+  .code-label{font-family:var(--font-mono);font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;justify-content:space-between;}
+
+  .stack-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .chip{font-family:var(--font-mono);font-size:11.5px;border:1px solid var(--line-dark);padding:5px 11px;color:var(--paper);opacity:.85;}
+
+  .bug-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px;}
+  @media(max-width:780px){.bug-grid{grid-template-columns:1fr;}}
+  .bug-card{border:1px solid var(--line-dark);padding:18px;background:#181818;}
+  .bug-card .n{font-family:var(--font-display);font-size:26px;color:var(--gold);}
+  .bug-card .t{font-size:13px;color:#c9c9c9;margin-top:6px;}
+
+  .img-slot{
+    border:1px dashed var(--gold);
+    background:#161616;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;gap:4px;
+    font-family:var(--font-mono);font-size:11.5px;color:#9a9a9a;
+    padding:22px 14px;min-height:130px;margin-bottom:12px;
+  }
+  .img-slot.tall{min-height:220px;}
+  .img-slot.wide{min-height:180px;}
+  .img-slot strong{color:var(--gold);font-size:11.5px;display:block;}
+  .img-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px;}
+  .img-grid .img-slot:first-child:last-child{grid-column:1 / -1;}
+  .link-slot{
+    font-family:var(--font-mono);font-size:12.5px;
+    border:1px dashed var(--gold);color:var(--gold);
+    padding:10px 16px;text-decoration:none;
+    display:inline-flex;align-items:center;gap:8px;
+    background:#161616;margin-bottom:16px;
+  }
+
+  /* ---------- KSA ---------- */
+  .ksa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:36px;}
+  @media(max-width:900px){.ksa-grid{grid-template-columns:1fr;}}
+  .ksa-col .head{display:flex;align-items:baseline;gap:10px;margin-bottom:18px;}
+  .ksa-col .head .letter{font-family:var(--font-display);font-size:34px;color:var(--gold-dim);}
+  .ksa-col .head h3{font-size:18px;}
+  .ksa-item{border-top:1px solid var(--line);padding:16px 0;}
+  .ksa-item:first-of-type{border-top:none;}
+  .ksa-item .t{font-weight:600;font-size:14.5px;margin-bottom:6px;}
+  .ksa-item .d{font-size:13.8px;color:#3a3a3a;}
+
+  /* ---------- REFLECTION ---------- */
+  .reflect-block{margin-bottom:52px;}
+  .reflect-block:last-child{margin-bottom:0;}
+  .reflect-block .lbl{font-family:var(--font-mono);font-size:12px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:block;}
+  .reflect-block h3{font-size:22px;margin-bottom:14px;color:var(--paper);}
+  .reflect-block p{color:#c9c9c9;font-size:15.5px;max-width:74ch;}
+  .quote{
+    border-left:3px solid var(--gold);
+    padding:4px 0 4px 20px;margin:20px 0;
+    font-family:var(--font-display);font-size:17px;color:var(--paper);
+  }
+  .quote cite{display:block;font-family:var(--font-mono);font-size:12px;color:#999999;font-style:normal;margin-top:8px;}
+
+  /* accordion */
+  .acc-item{border-bottom:1px solid var(--line-dark);}
+  .acc-btn{
+    width:100%;text-align:left;background:none;border:none;color:var(--paper);
+    font-family:var(--font-display);font-size:17px;padding:18px 0;
+    display:flex;justify-content:space-between;align-items:center;cursor:pointer;
+  }
+  .acc-btn .plus{font-family:var(--font-mono);color:var(--gold);font-size:20px;transition:transform .2s;}
+  .acc-btn.open .plus{transform:rotate(45deg);}
+  .acc-panel{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+  .acc-panel p{color:#c9c9c9;padding-bottom:18px;max-width:70ch;font-size:14.8px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--ink);color:var(--paper);padding:56px 0 40px;border-top:1px solid var(--line-dark);}
+  footer .wrap{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;}
+  footer .foot-note{font-family:var(--font-mono);font-size:12px;color:#8a8a8a;max-width:50ch;}
+
+  .edit-note{
+    background:#fff7e0;border:1px dashed var(--warn);color:var(--warn);
+    font-family:var(--font-mono);font-size:12px;padding:10px 14px;margin:14px 0;
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="wrap">
+    <div class="brand">Meagen Chong <span>· BTP/AI</span></div>
+    <div class="navlinks">
+      <a href="#intro">Intro</a>
+      <a href="#role">Role</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#ksa">KSA</a>
+      <a href="#reflection">Reflection</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO / INTRODUCTION ============ -->
+<section class="hero" id="intro">
+  <div class="wrap">
+    <div class="eyebrow"><span class="node"></span>Guided Work-Based Learning 1 · Digital Portfolio</div>
+    <div class="hero-grid">
+      <div>
+        <h1>Hi, I'm <em>Meagen</em> — building on SAP BTP, with AI in the loop.</h1>
+        <p class="lede">A Year 3 AAI student interning with the SAP BTP Team at ST Engineering, where I work across the frontend, backend, and AI layers of an enterprise maintenance platform — and spend the rest of my time chasing down bugs before they reach production.</p>
+        <div class="contact-row">
+          <a class="pill placeholder" href="mailto:meagen666@gmail.com">✉ meagen666@gmail.com</a>
+          <a class="pill placeholder" href="https://www.linkedin.com/in/meagen-chong-9192a631a">LinkedIn/ Meagen Chong</a>
+        </div>
+      </div>
+      <div class="avatar-wrap">
+        <img src="profile_pic.jpeg" class="avatar-img" alt="Profile photo">
+      </div>
+    </div>
+
+    <div class="schematic">
+      <svg viewBox="0 0 920 120" xmlns="http://www.w3.org/2000/svg">
+        <line x1="60" y1="60" x2="860" y2="60" stroke="#dcdcdc" stroke-width="2"/>
+        <g font-family="IBM Plex Mono" font-size="11" fill="#0a0a0a">
+          <circle cx="60" cy="60" r="7" fill="#d81e2c"/>
+          <text x="60" y="95" text-anchor="middle">INTRO</text>
+          <circle cx="260" cy="60" r="6" fill="#ffffff" stroke="#0a0a0a" stroke-width="2"/>
+          <text x="260" y="95" text-anchor="middle">ROLE &amp; COMPANY</text>
+          <circle cx="500" cy="60" r="6" fill="#ffffff" stroke="#0a0a0a" stroke-width="2"/>
+          <text x="500" y="95" text-anchor="middle">EVIDENCE OF WORK</text>
+          <circle cx="700" cy="60" r="6" fill="#ffffff" stroke="#0a0a0a" stroke-width="2"/>
+          <text x="700" y="95" text-anchor="middle">KSA</text>
+          <circle cx="860" cy="60" r="7" fill="#d81e2c"/>
+          <text x="860" y="95" text-anchor="middle">REFLECTION</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROLE & COMPANY ============ -->
+<section id="role">
+  <div class="wrap">
+    <div class="section-divider"><span class="dot"></span><span class="section-tag">01 — ROLE &amp; COMPANY</span><span class="rule"></span></div>
+    <h2 style="font-size:32px;max-width:26ch;">Where I'm interning, and what I'm responsible for.</h2>
+
+    <div class="kv-grid">
+      <div class="kv"><div class="k">Company</div><div class="v">ST Engineering</div></div>
+      <div class="kv"><div class="k">Department</div><div class="v">SAP BTP Team</div></div>
+      <div class="kv"><div class="k">Duration</div><div class="v">1 Apr 2026 – 31 Mar 2027</div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>The team</h3>
+        <p>The SAP BTP Team designs, develops and maintains internal enterprise applications that simplify processes across different departments. The team builds new digital solutions on SAP Business Technology Platform and integrates them with ST Engineering’s core SAP backend systems, allowing departments to access essential data, automate workflows and carry out their work more efficiently. I support two of the team’s active duties like quality assurance for an existing case management system and the full-stack development of a new AI-augmented maintenance platform.</p>
+      </div>
+      <div class="card">
+        <h3>My job scope</h3>
+        <p>My job scope involves supporting the team across learning, knowledge sharing and project development. I regularly self-learn new SAP technologies, attend workshops and training sessions, and share key takeaways with colleagues who were unable to participate. I also contribute to the development and testing of internal applications built on SAP BTP. One of the projects I am involved in is the development of an MRO intelligence platform that incorporates AI features to support maintenance-related processes and improve operational efficiency.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EVIDENCE OF WORK ============ -->
+<section class="dark" id="evidence">
+  <div class="wrap">
+    <div class="section-divider"><span class="dot"></span><span class="section-tag">02 — EVIDENCE OF WORK</span><span class="rule"></span></div>
+    <h2 style="font-size:32px;max-width:30ch;color:var(--paper);">The different ways I contributed.</h2>
+
+    <div class="tabbar" style="margin-top:36px;">
+      <button class="tabbtn active" data-tab="t1">01 · SAP AI Workshop</button>
+      <button class="tabbtn" data-tab="t2">02 · Case Management UAT</button>
+      <button class="tabbtn" data-tab="t3">03 · BridgIt MRO Platform</button>
+    </div>
+
+    <!-- TAB 1: Workshop -->
+    <div class="tabpanel active" id="t1">
+      <div class="evidence-layout">
+        <div>
+          <span class="role-tag">UPSKILLING · KNOWLEDGE TRANSFER</span>
+          <h4>SAP AI Workshop — Joule, SAP AI Core &amp; Document AI</h4>
+          <p>I attended a hands-on workshop covering three key SAP AI services: <strong>Joule Studio</strong>, which enables the creation and extension of AI-powered agents and skills within SAP environments; <strong>SAP AI Core</strong>, the managed runtime for hosting and orchestrating AI models; and <strong>SAP Document AI</strong>, which supports enterprise-grade document extraction and OCR.</p>
+          <p style="margin-top:14px;">Several colleagues weren't able to attend, so I put together and delivered a short internal presentation to bring them up to speed. This was my first time teaching technical material to working professionals rather than classmates.</p>
+          <a class="link-slot" href="SAP_AI_Workshop.pptx">Download my workshop presentation slides</a>
+        </div>
+        <div>
+          <div class="img-slot tall">
+            <img src="workshop.jpeg" style="width:100%;display:block;">
+          </div>
+          <div class="acc-item">
+            <button class="acc-btn">Joule Studio<span class="plus">+</span></button>
+            <div class="acc-panel"><p>SAP’s environment for creating and extending custom AI agents and skills that work within SAP applications. It allows developers to design conversational experiences that help users access information and complete business tasks more efficiently.</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-btn">SAP AI Core <span class="plus">+</span></button>
+            <div class="acc-panel"><p>The managed layer for deploying, running and scaling AI models within SAP BTP, including access to large language models through SAP Generative AI Hub. This is particularly relevant to how BridgIt’s AI capabilities could be developed further.</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-btn">SAP Document AI <span class="plus">+</span></button>
+            <div class="acc-panel"><p>An enterprise-grade service that uses OCR and AI to extract, classify and structure information from documents, reducing the need for manual data entry and processing.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: UAT -->
+    <div class="tabpanel" id="t2">
+      <div class="evidence-layout">
+        <div>
+          <span class="role-tag">QUALITY ASSURANCE · USER ACCEPTANCE TESTING</span>
+          <h4>Case Management System — UAT</h4>
+          <p>Before the new case management system was released to clients, I conducted user-acceptance testing on the application developed by my colleagues. I tested each function and interface element against the intended requirements, documented any issues or inconsistencies, and provided feedback to help the team improve the system before deployment.</p>
+          <p style="margin-top:14px;">I documented the testing process in an Excel-based UAT sheet to ensure each test case was clear, consistent and traceable. For every scenario, I recorded the persona performing the test, the action carried out within the system, and a screenshot showing the result. This allowed the development team to understand how different users would interact with the application, verify whether each function behaved as intended, and identify areas that required improvement before the system was released to clients.</p>
+          <img src="UAT.png" style="width:100%;display:block;">
+        </div>
+        <div>
+          <div class="bug-grid" style="grid-template-columns:1fr;">
+            <div class="bug-card">
+              <div class="n">01 · Editability error</div>
+              <img src="UAT3.png" style="width:100%;display:block;">
+              <div class="t">Fields submitted by the Collection Team were still editable when viewed through a Business account. Although the changes were not saved, these fields should have been displayed as read-only to prevent confusion and ensure users do not assume they can modify information provided by another team.</div>
+            </div>
+            <div class="bug-card">
+              <div class="n">02 · Resubmission without clarification</div>
+              <img src="UAT1.png" style="width:100%;display:block;">
+              <div class="t">When a Business account returned a request to the Collection Team for clarification, the Collection Team could resubmit it without making any changes. The system should require an update or clarification before resubmission to prevent the same incomplete information from being sent back repeatedly.</div>
+            </div>
+            <div class="bug-card">
+              <div class="n">03 · Inconsistent refresh</div>
+              <img src="UAT2.png" style="width:100%;display:block;">
+              <div class="t">After the refresh button was selected, the total number of cases shown above the list was updated, but the count displayed on the Open Cases tile remained unchanged. Both figures should refresh together to ensure users see consistent and accurate case information across the dashboard.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: BridgIt -->
+    <div class="tabpanel" id="t3">
+      <div class="evidence-layout">
+        <div>
+          <span class="role-tag">FRONTEND + BACKEND · REACT · SAP CAP · HANA CLOUD · XSUAA</span>
+          <h4>BridgIt — MRO Intelligence Platform</h4>
+          <p>BridgIt is an enterprise maintenance platform for equipment servicing across ST Engineering's business units, replacing fragmented WhatsApp-and-spreadsheet workflows with a single role-aware system for technicians, supervisors, and managers.</p>
+          <p style="margin-top:14px;"><strong style="color:var(--paper);">My Contribution and Current Progress</strong></p>
+          <p style="margin-top:14px;">I began by developing the complete frontend proof of concept using React and SAP UI5 Web Components across the Technician, Supervisor and Manager personas. After establishing the user experience and core workflows, I progressed to building the supporting backend services and deploying the application on SAP BTP.</p>
+          <p style="margin-top:14px;">So far, I have configured the BTP development environment, structured the project for deployment, implemented role-based authentication using XSUAA, and created persistent database entities in SAP HANA Cloud to replace the original mock data. The platform is still under active development, with further backend integration and several AI-powered features currently being designed and implemented.</p>
+          <ul>
+            <li><strong>BTP &amp; environment setup</strong> — provisioned the Cloud Foundry space, HANA Cloud instance, and SAP Business Application Studio dev space the whole team builds against.</li>
+            <li><strong>Project structure</strong> — set up the monorepo layout (UI, CAP service, and MTA descriptor as siblings) so the build tooling can assemble all three into one deployable.</li>
+            <li><strong>Authentication &amp; roles (XSUAA)</strong> — defined the role scopes so a Technician, Supervisor, and Manager each see and can call only what their role permits, enforced server-side rather than just hidden in the UI.</li>
+            <li><strong>Database schema (HANA Cloud)</strong> — modelled Tickets, Equipment, Diagnostics, Insights, and Spare Parts as persistent HDI entities, replacing the POC's in-memory mock data.</li>
+          </ul>
+          <div class="stack-chips">
+            <span class="chip">React</span><span class="chip">SAP UI5 Web Components</span>
+            <span class="chip">SAP CAP (Node.js)</span><span class="chip">HANA Cloud</span>
+            <span class="chip">XSUAA</span><span class="chip">Cloud Foundry</span>
+            <span class="chip">SAP AI</span><span class="chip">RPA</span>
+            <span class="chip">Machine Learning</span><span class="chip">NLP</span>
+          </div>
+        </div>
+        <div>
+          <div class="img-grid">
+            <img src="mro1.png" style="width:100%;display:block;">
+            <img src="mro2.png" style="width:100%;display:block;">
+            <img src="mro3.png" style="width:100%;display:block;">
+            <img src="mro4.png" style="width:100%;display:block;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KSA ============ -->
+<section id="ksa">
+  <div class="wrap">
+    <div class="section-divider"><span class="dot"></span><span class="section-tag">03 — KNOWLEDGE · SKILLS · ATTITUDES</span><span class="rule"></span></div>
+    <h2 style="font-size:32px;max-width:28ch;">What this internship helped developed in me.</h2>
+
+    <div class="ksa-grid">
+      <div class="ksa-col">
+        <div class="head"><span class="letter">K</span><h3>Knowledge</h3></div>
+        <div class="ksa-item"><div class="t">Application lifecycle on SAP BTP</div><div class="d">How an application progresses from a frontend proof of concept to backend development, authentication, database persistence, deployment and future production readiness.</div></div>
+        <div class="ksa-item"><div class="t">SAP BTP architecture</div><div class="d">How App Router, XSUAA, CAP, and HANA Cloud fit together as one authenticated request path.</div></div>
+        <div class="ksa-item"><div class="t">Enterprise data modelling</div><div class="d">How business requirements are translated into structured entities and relationships in SAP HANA Cloud, including tickets, equipment, diagnostics and spare parts.</div></div>
+        <div class="ksa-item"><div class="t">Software testing and release readiness</div><div class="d">Understanding that an application must be tested against business rules, user permissions and expected workflows before it can be safely released to clients.</div></div>
+        <div class="ksa-item"><div class="t">AI service selection</div><div class="d">Understanding how different SAP AI services support different needs, and why a technology should be selected based on the business problem rather than simply because it contains AI.</div></div>
+      </div>
+      <div class="ksa-col">
+        <div class="head"><span class="letter">S</span><h3>Skills</h3></div>
+        <div class="ksa-item"><div class="t">Full-stack development</div><div class="d">Shipping frontend (React/UI5) and backend (CAP, HANA schema, auth config) as one working system.</div></div>
+        <div class="ksa-item"><div class="t">Structured UAT testing</div><div class="d">Systematically checking field editability, completeness, and business-rule logic rather than clicking around unguided and recording process in detail.</div></div>
+        <div class="ksa-item"><div class="t">Technical documentation</div><div class="d">Recording test actions, user personas, expected outcomes, actual results and screenshots in a clear format that other team members can understand and act on.</div></div>
+        <div class="ksa-item"><div class="t">User-centred design</div><div class="d">Considering how different personas would navigate the platform and designing workflows around their actual responsibilities rather than only technical requirements.</div></div>
+      </div>
+      <div class="ksa-col">
+        <div class="head"><span class="letter">A</span><h3>Attitudes</h3></div>
+        <div class="ksa-item"><div class="t">Adaptability</div><div class="d">Having the ability to adjust to new conditions and changes in the project environmentAdjusting between testing, development, workshops, research and knowledge sharing depending on the team’s changing needs.</div></div>
+        <div class="ksa-item"><div class="t">Attention to detail</div><div class="d">Treating a "small" UI validation bug as seriously as a backend one, because both corrupt data the same way.</div></div>
+        <div class="ksa-item"><div class="t">Willingness to learn</div><div class="d">Actively attending workshops, exploring SAP documentation and applying newly acquired knowledge to ongoing work.</div></div>
+        <div class="ksa-item"><div class="t">Comfort with ambiguity</div><div class="d">Working through parts of the BTP stack (XSUAA, MTA deployment) with no prior exposure, by reading the guide, testing, and correcting.</div></div>
+        <div class="ksa-item"><div class="t">Receptiveness to feedback</div><div class="d">Using comments from colleagues and supervisors to refine the interface, application structure and technical approach.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REFLECTION ============ -->
+<section class="dark" id="reflection">
+  <div class="wrap">
+    <div class="section-divider"><span class="dot"></span><span class="section-tag">04 — REFLECTION</span><span class="rule"></span></div>
+    <h2 style="font-size:32px;max-width:26ch;color:var(--paper);">What I learned, and what I'd do differently.</h2>
+
+    <div style="margin-top:44px;">
+
+      <div class="reflect-block">
+        <span class="lbl">Nature of Work</span>
+        <h3>Core responsibilities across daily, weekly and long-term work</h3>
+        <p>Although the specific tasks changed throughout my internship, the foundation of my role remained consistent: learning unfamiliar technologies, applying them to real systems, checking that applications function correctly and communicating findings clearly to the team. At the beginning of the internship, my daily work focused mainly on self-learning and attending SAP workshops. I explored technologies such as SAP BTP, Joule Studio and SAP AI Core, reviewed technical documentation and tested what I had learnt. I also delivered knowledge-sharing sessions for colleagues who were unable to attend the workshops.</p>
+        <p>As the internship progressed, my daily responsibilities shifted towards user-acceptance testing and application development. For the case management project, I tested workflows from the perspectives of different user personas, checked whether the system followed the intended business rules and recorded issues using structured UAT sheets with actions, expected outcomes and screenshot evidence.</p>
+        <p>My current day-to-day work focuses more heavily on BridgIt, an AI-augmented MRO platform. This includes developing and reviewing frontend and backend components, troubleshooting issues and considering how features should connect with authentication, databases and SAP BTP services.</p>
+        <p>On a weekly basis, I review my progress, discuss technical decisions with colleagues, refine features based on feedback and identify the next areas that require further research or development. I also compare possible implementation approaches before deciding whether a feature is suitable for prototyping or requires a more scalable enterprise solution.</p>
+        <p>Over the longer term, my responsibility is to help move projects from early concepts towards reliable applications that can support real business processes. For BridgIt, this means progressing from a frontend proof of concept towards a full-stack platform with role-based access, persistent data, backend services and further AI capabilities.</p>
+        <p>These activities contribute directly to my future professional role because they reflect the full application-development process. The work requires me to continually learn, interpret business needs, build technical solutions, test their reliability and communicate effectively with both technical and non-technical colleagues.</p>
+      </div>
+
+      <div class="reflect-block">
+        <span class="lbl">Learning and Growth</span>
+        <h3>Broadening from frontend development into full-stack enterprise development</h3>
+        <p>Before this internship, my frontend development skills were already reasonably solid. Building BridgIt broadened my abilities by requiring me to understand how the interface connects to authentication, backend services, database entities and deployment infrastructure. Implementing role-based access taught me that hiding a function in the interface is not sufficient security. A permission is only meaningful when it is also enforced at the API and backend levels. Similarly, replacing mock data with persistent HANA Cloud entities showed me that database design affects how reliably an application can support future features. This experience changed my definition of a completed feature. I now consider whether it is secure, maintainable, properly integrated and suitable for different user roles, rather than only whether it appears to work from the frontend.</p>
+        <h3>Developing a more systematic approach to quality</h3>
+        <p>The UAT process strengthened my attention to detail and my ability to interpret business requirements. Rather than testing the system randomly, I learnt to examine workflows systematically according to the responsibilities and permissions of each persona. I also realised that small interface inconsistencies can have a significant impact on user confidence. Even when an unintended edit is not saved, allowing a user to change a read-only field can still create confusion. This taught me that quality assurance is not only about preventing system failure, it is also about ensuring that users understand what they are permitted to do.</p>
+      </div>
+
+      <div class="reflect-block">
+        <span class="lbl">Accomplishments</span>
+        <h3>Progressing BridgIt beyond a frontend proof of concept</h3>
+        <p>My main accomplishment was progressing BridgIt from an initial frontend proof of concept towards a deployed full-stack SAP BTP application. I first developed the React and SAP UI5 Web Components interface across the Technician, Supervisor and Manager personas. I then began building the supporting enterprise infrastructure and backend services.</p>
+        <p>My contributions so far include:</p>
+        <ul>
+          <li>Configuring the SAP BTP development environment used for the project</li>
+          <li>Establishing the project structure for the UI, CAP service and MTA deployment</li>
+          <li>Implementing XSUAA scopes and role-based access</li>
+          <li>Modelling persistent entities in SAP HANA Cloud</li>
+          <li>Replacing parts of the original mock-data approach with real backend services</li>
+          <li>Planning the next stage of AI integration</li>
+        </ul>
+        <p>The platform remains under active development, with additional backend integration and AI features still being implemented. Nevertheless, the current progress represents a significant shift from a visual demonstration towards a more complete enterprise application.</p>
+        <h3>Contributing to release quality through UAT</h3>
+        <p>Through UAT, I identified several issues that could have affected clarity and workflow consistency for users. These findings were documented with reproducible steps and screenshot evidence, making it easier for the development team to understand and resolve them before client release. This showed me that my contribution was not limited to building new features. Testing and documenting issues also supported the reliability and usability of applications developed by the wider team.</p>
+      </div>
+
+      <div class="reflect-block">
+        <span class="lbl">Self-introspection</span>
+        <h3>Recognising how I naturally approach development</h3>
+        <p>I recognised that I naturally gravitate towards visible and immediately demonstrable work, such as user interfaces and working features. These tasks provide quick feedback and make progress easy to see. In comparison, I was initially less comfortable with less visible areas such as authentication, database design and deployment configuration. However, these were also the areas that contributed most to my growth. They forced me to slow down, understand the system architecture and consider the consequences of each technical decision. In future projects, I would define the authentication, data structure, integration requirements and deployment approach earlier rather than treating them as later additions. I would also conduct technical feasibility reviews earlier in the development process. This would help me distinguish between features that are suitable for rapid prototyping and those that require a managed backend service before investing too much time in the initial implementation.</p>
+      </div>
+
+      <div class="reflect-block">
+        <span class="lbl">Contribution to growth in my IT job role</span>
+        <h3>Conversations with my supervisors</h3>
+        <p>A key lesson I learnt is that developing AI solutions in an enterprise environment involves much more than selecting or implementing an AI model. The AI component must connect securely to existing data, applications, business rules and backend systems. This was reflected in a conversation with my supervisor, who explained that AI may be needed, but the systems it must integrate with are not always fully developed, making backend integration complex and time-consuming. My experience with BridgIt reinforced this point. Building the initial AI features was often more straightforward than connecting the application properly to authentication, HANA Cloud and CAP services. As a result, I now evaluate AI solutions more critically. Instead of focusing only on what a model can do, I consider whether the required data is available, how the output will enter the business workflow, how access will be controlled and whether the solution can be maintained at scale. The internship has therefore strengthened my interest in working at the intersection of AI, cloud platforms, full-stack development and enterprise integration. It has also given me a more realistic understanding of the technical and organisational work required to turn an AI concept into a usable business solution.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div>
+      <div class="brand" style="margin-bottom:10px;">Meagen Chong</div>
+      <div class="foot-note">Digital Portfolio for Guided Work-Based Learning 1 · ST Engineering, SAP BTP Team</div>
+    </div>
+    <div class="contact-row">
+      <a class="pill placeholder" href="mailto:meagen666@gmail.com">✉ meagen666@gmail.com</a>
+      <a class="pill placeholder" href="https://www.linkedin.com/in/meagen-chong-9192a631a">LinkedIn/ Meagen Chong</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Tabs
+  document.querySelectorAll('.tabbtn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+  // Accordion
+  document.querySelectorAll('.acc-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const panel = btn.nextElementSibling;
+      const isOpen = btn.classList.contains('open');
+      document.querySelectorAll('.acc-btn').forEach(b=>{b.classList.remove('open'); b.nextElementSibling.style.maxHeight=null;});
+      if(!isOpen){ btn.classList.add('open'); panel.style.maxHeight = panel.scrollHeight + 'px'; }
+    });
+  });
+</script>
+</body>
+</html>
